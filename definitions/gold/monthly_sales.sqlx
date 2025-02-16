@@ -1,0 +1,16 @@
+config {
+  type: "view",
+  schema: "thelook_ecommerce_dataform_gold",
+  description: "Monthly sales",
+  tags: ["gold_layer"]
+}
+
+SELECT
+  EXTRACT(MONTH FROM created_at) AS months,
+  ROUND(SUM(sale_price * num_of_item), 2) AS revenue,
+  COUNT(DISTINCT order_id) AS order_count,
+  COUNT(DISTINCT user_id) AS customers_purchased
+FROM
+    ${ref("non_cancelled_or_returned_order_items")}
+GROUP BY months
+ORDER BY revenue DESC

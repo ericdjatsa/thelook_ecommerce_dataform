@@ -1,0 +1,25 @@
+config {
+  type: "view",
+  schema: "thelook_ecommerce_dataform_silver",
+  description: "Non Cancelled or Returned Order Items",
+  tags: ["silver_layer"]
+}
+
+SELECT 
+    oi.user_id,
+    oi.id AS order_item_id,
+    oi.order_id,
+    oi.product_id,
+    oi.inventory_item_id,
+    oi.status,
+    oi.created_at,
+    oi.shipped_at,
+    oi.delivered_at,
+    oi.returned_at,
+    oi.sale_price, 
+    o.num_of_item,
+    o.gender
+FROM ${ref("order_items")} oi
+INNER JOIN ${ref("orders")} AS o 
+ON oi.order_id = o.order_id
+WHERE oi.status NOT IN ('Cancelled', 'Returned')
