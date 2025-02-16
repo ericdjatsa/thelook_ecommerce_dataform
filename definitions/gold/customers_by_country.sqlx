@@ -1,0 +1,29 @@
+config {
+  type: "view",
+  schema: "thelook_ecommerce_dataform_gold",
+  description: "Customers by Country",
+  tags: ["gold_layer"]
+}
+
+
+WITH customers AS (
+  SELECT
+    DISTINCT oi.user_id,
+    SUM(CASE WHEN u.gender = 'M' THEN 1 ELSE null END) AS male,
+    SUM(CASE WHEN u.gender = 'F' THEN 1 ELSE null END) AS female,
+    u.country AS country
+    FROM ${ref("order_items")} AS oi
+    INNER JOIN ${ref("users")} AS u
+    ON oi.user_id = u.id
+    WHERE oi.status not in ('Cancelled', 'Returned')
+    GROUP BY user_id, country
+    )
+
+SELECT
+  country,
+  COUNT(DISTINCT user_id) AS customers_count,
+  COUNT(female) AS female,
+  COUNT(male) AS male
+FROM customers
+GROUP BY country
+ORDER BY customers_count DESC
