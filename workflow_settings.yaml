@@ -1,0 +1,5 @@
+defaultProject: myericanalytics
+defaultLocation: US
+defaultDataset: thelook_ecommerce_dataform
+defaultAssertionDataset: thelook_ecommerce_dataform_assertions
+dataformCoreVersion: 3.0.0
