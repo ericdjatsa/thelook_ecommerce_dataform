@@ -1,0 +1,8 @@
+-- users data
+config {
+  type: "declaration",
+  database: "bigquery-public-data",
+  schema: "thelook_ecommerce",
+  name: "users",
+  description: "users table"
+}
