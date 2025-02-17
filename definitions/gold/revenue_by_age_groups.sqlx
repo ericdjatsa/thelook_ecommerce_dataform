@@ -6,13 +6,7 @@ config {
 }
 
 SELECT
-  CASE
-    WHEN u.age < 12 THEN 'Kids'
-    WHEN u.age BETWEEN 12 AND 20 THEN 'Teenagers'
-    WHEN u.age BETWEEN 20 AND 30 THEN 'Young Adults'
-    WHEN u.age BETWEEN 30 AND 60 THEN 'Adults'
-    WHEN u.age > 60 THEN 'Elderly'
-    END AS age_group,
+  ${common.ageBucket("u.age")} AS age_group,
   COUNT(DISTINCT nc_oi.user_id) AS num_customers,
   SUM(num_of_item) AS quantity_purchased,
   ROUND(SUM(sale_price * num_of_item), 2) AS revenue

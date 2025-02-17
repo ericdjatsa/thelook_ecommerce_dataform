@@ -2,7 +2,11 @@ config {
   type: "view",
   schema: "thelook_ecommerce_dataform_gold",
   description: "Top selling Brands",
-  tags: ["gold_layer"]
+  tags: ["gold_layer"],
+  assertions: {
+    /*nonNull: ["brand"],*/
+    rowConditions: ["revenue >= 0"]
+  }
 }
 
 SELECT 

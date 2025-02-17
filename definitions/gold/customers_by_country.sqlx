@@ -2,7 +2,10 @@ config {
   type: "view",
   schema: "thelook_ecommerce_dataform_gold",
   description: "Customers by Country",
-  tags: ["gold_layer"]
+  tags: ["gold_layer"],
+  assertions: {
+    nonNull: ["country"]
+  }
 }
 
 
