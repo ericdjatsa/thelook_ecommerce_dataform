@@ -10,14 +10,14 @@ SELECT
   u.id AS customer_id,
   u.email AS  email,
   p.category as category,
-  ROUND(SUM(oi.sale_price * o.num_of_item), 2) AS total_purchase
-FROM ${ref("order_items")} AS oi
+  ROUND(SUM(nc_oi.sale_price * o.num_of_item), 2) AS total_purchase
+FROM ${ref("non_cancelled_or_returned_order_items")} AS nc_oi
   INNER JOIN ${ref("orders")} AS o
-  ON oi.order_id = o.order_id
+  ON nc_oi.order_id = o.order_id
   INNER JOIN ${ref("users")} AS u
   ON o.user_id = u.id
   INNER JOIN ${ref("products")} AS p
-  ON oi.product_id = p.id
+  ON nc_oi.product_id = p.id
 GROUP BY customer_id, email, category
 ORDER BY total_purchase DESC
 LIMIT 10
