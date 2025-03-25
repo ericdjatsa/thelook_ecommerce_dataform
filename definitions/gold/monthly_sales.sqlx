@@ -6,11 +6,11 @@ config {
 }
 
 SELECT
-  EXTRACT(MONTH FROM created_at) AS months,
+  FORMAT_DATE("%Y-%m",created_at) as month,
   ROUND(SUM(sale_price * num_of_item), 2) AS revenue,
   COUNT(DISTINCT order_id) AS order_count,
-  COUNT(DISTINCT user_id) AS customers_purchased
+  COUNT(DISTINCT user_id) AS number_of_customers
 FROM
     ${ref("non_cancelled_or_returned_order_items")}
-GROUP BY months
+GROUP BY month
 ORDER BY revenue DESC
