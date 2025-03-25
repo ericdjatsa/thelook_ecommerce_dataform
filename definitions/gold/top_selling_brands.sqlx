@@ -4,7 +4,6 @@ config {
   description: "Top selling Brands",
   tags: ["gold_layer"],
   assertions: {
-    /*nonNull: ["brand"],*/
     rowConditions: ["revenue >= 0"]
   }
 }
