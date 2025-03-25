@@ -1,0 +1,16 @@
+config {
+  type: "view",
+  schema: "thelook_ecommerce_dataform_gold",
+  description: "Most Cancelled Returned Brands",
+  tags: ["gold_layer"],
+}
+
+SELECT
+  p.brand AS brand,
+  SUM(CASE WHEN oi.status = 'Cancelled' THEN 1 ELSE null END) AS Num_Cancelled,
+  SUM(CASE WHEN oi.status = 'Returned' THEN 1 ELSE null END) AS Num_Returned
+FROM ${ref("order_items")} oi
+INNER JOIN ${ref("products")} p
+ON oi.product_id = p.id
+GROUP BY brand
+ORDER BY Num_Cancelled DESC

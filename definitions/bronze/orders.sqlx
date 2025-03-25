@@ -4,5 +4,5 @@ config {
   database: "bigquery-public-data",
   schema: "thelook_ecommerce",
   name: "orders",
-  description: "orders table"
+  description: "orders table. Primary keys: order_id. Foreign keys: user_id"
 }

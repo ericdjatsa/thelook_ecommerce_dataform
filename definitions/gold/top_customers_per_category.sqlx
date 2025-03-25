@@ -1,0 +1,23 @@
+config {
+  type: "view",
+  schema: "thelook_ecommerce_dataform_gold",
+  description: "Top customers per product category",
+  tags: ["gold_layer"],
+}
+
+
+SELECT
+  u.id AS customer_id,
+  u.email AS  email,
+  p.category as category,
+  ROUND(SUM(oi.sale_price * o.num_of_item), 2) AS total_purchase
+FROM ${ref("order_items")} AS oi
+  INNER JOIN ${ref("orders")} AS o
+  ON oi.order_id = o.order_id
+  INNER JOIN ${ref("users")} AS u
+  ON o.user_id = u.id
+  INNER JOIN ${ref("products")} AS p
+  ON oi.product_id = p.id
+GROUP BY customer_id, email, category
+ORDER BY total_purchase DESC
+LIMIT 10
