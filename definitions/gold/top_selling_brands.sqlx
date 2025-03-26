@@ -10,10 +10,11 @@ config {
 
 SELECT 
   p.brand AS brand,
+  p.category,
   ROUND(SUM(sale_price * num_of_item), 2) AS revenue,
   SUM(num_of_item) AS quantity
 FROM ${ref("non_cancelled_or_returned_order_items")} nc_oi
 INNER JOIN ${ref("products")} p
 ON nc_oi.product_id = p.id
-GROUP BY brand
+GROUP BY brand,category
 ORDER BY revenue DESC
