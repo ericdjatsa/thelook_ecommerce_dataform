@@ -15,4 +15,3 @@ FROM ${ref("non_cancelled_or_returned_order_items")} AS nc_oi
   ON nc_oi.product_id = p.id
 GROUP BY month,category
 ORDER BY total_purchase DESC
-LIMIT 10
