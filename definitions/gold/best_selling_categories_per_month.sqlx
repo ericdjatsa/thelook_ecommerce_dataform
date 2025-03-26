@@ -1,0 +1,18 @@
+config {
+  type: "view",
+  schema: "thelook_ecommerce_dataform_gold",
+  description: "Best selling categories",
+  tags: ["gold_layer"],
+}
+
+
+SELECT
+  FORMAT_DATE("%Y-%m",created_at) as month,
+  p.category as category,
+  ROUND(SUM(nc_oi.sale_price * nc_oi.num_of_item), 2) AS total_purchase
+FROM ${ref("non_cancelled_or_returned_order_items")} AS nc_oi
+  INNER JOIN ${ref("products")} AS p
+  ON nc_oi.product_id = p.id
+GROUP BY month,category
+ORDER BY total_purchase DESC
+LIMIT 10
