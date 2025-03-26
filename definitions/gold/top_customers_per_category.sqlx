@@ -5,7 +5,7 @@ config {
   tags: ["gold_layer"],
 }
 
-
+WITH sales_per_cust_category AS (
 SELECT
   u.id AS customer_id,
   u.email AS  email,
@@ -19,5 +19,12 @@ FROM ${ref("non_cancelled_or_returned_order_items")} AS nc_oi
   INNER JOIN ${ref("products")} AS p
   ON nc_oi.product_id = p.id
 GROUP BY customer_id, email, category
-ORDER BY total_purchase DESC
-LIMIT 10
+),
+sales_per_cust_category_ranked AS (
+SELECT  *, ROW_NUMBER() OVER (PARTITION BY category ORDER BY total_purchase DESC) AS rank 
+FROM sales_per_cust_category
+)
+SELECT * from 
+sales_per_cust_category_ranked
+WHERE rank <= 3
+ORDER BY category,total_purchase DESC
