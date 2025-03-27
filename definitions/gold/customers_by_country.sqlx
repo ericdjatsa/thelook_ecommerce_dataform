@@ -14,19 +14,23 @@ WITH customers AS (
     DISTINCT oi.user_id,
     SUM(CASE WHEN u.gender = 'M' THEN 1 ELSE null END) AS male,
     SUM(CASE WHEN u.gender = 'F' THEN 1 ELSE null END) AS female,
-    u.country AS country
+    u.country AS country,
+    p.category
     FROM ${ref("order_items")} AS oi
     INNER JOIN ${ref("users")} AS u
     ON oi.user_id = u.id
+    INNER JOIN ${ref("products")} AS p
+    ON oi.product_id = p.id
     WHERE oi.status not in ('Cancelled', 'Returned')
-    GROUP BY user_id, country
+    GROUP BY user_id, country,category
     )
 
 SELECT
   country,
+  category,
   COUNT(DISTINCT user_id) AS customers_count,
   COUNT(female) AS female,
   COUNT(male) AS male
 FROM customers
-GROUP BY country
+GROUP BY country,category
 ORDER BY customers_count DESC
