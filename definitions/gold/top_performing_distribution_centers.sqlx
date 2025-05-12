@@ -1,20 +1,18 @@
 config {
   type: "view",
   schema: "thelook_ecommerce_dataform_gold",
-  description: "Top selling Brands",
-  tags: ["gold_layer"],
-  assertions: {
-    rowConditions: ["revenue > 0"]
-  }
+  description: "Top performing distribution centers",
+  tags: ["gold_layer"]
 }
 
 SELECT 
-  p.brand AS brand,
-  p.category,
+  d.name AS distribution_center,
   ROUND(SUM(sale_price * num_of_item), 2) AS revenue,
   SUM(num_of_item) AS quantity
 FROM ${ref("non_cancelled_or_returned_order_items")} nc_oi
 INNER JOIN ${ref("products")} p
 ON nc_oi.product_id = p.id
-GROUP BY brand,category
+INNER JOIN ${ref("distribution_centers")} d
+ON p.distribution_center_id = d.id
+GROUP BY distribution_center
 ORDER BY revenue DESC
