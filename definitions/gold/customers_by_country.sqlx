@@ -19,8 +19,6 @@ WITH customers AS (
     FROM ${ref("order_items")} AS oi
     INNER JOIN ${ref("users")} AS u
     ON oi.user_id = u.id
-    INNER JOIN ${ref("products")} AS p
-    ON oi.product_id = p.id
     WHERE oi.status not in ('Cancelled', 'Returned')
     GROUP BY user_id, country,category
     )

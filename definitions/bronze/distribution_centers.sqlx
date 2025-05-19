@@ -1,0 +1,23 @@
+config { 
+  type: "operations",
+  schema: "thelook_ecommerce",
+  hasOutput: true,
+  tags: ["bronze_layer"]
+}
+
+LOAD DATA OVERWRITE ${self()}
+( 
+id		INTEGER,
+name		STRING,
+latitude		NUMERIC,
+longitude		NUMERIC,
+distribution_center_geom		GEOGRAPHY
+)
+FROM FILES ( 
+  format = 'CSV',
+  field_delimiter = ',',
+  quote ='"',
+  skip_leading_rows = 1,  -- Skip header row (if present)
+  allow_quoted_newlines = TRUE,  -- Allow newlines within quoted fields
+  uris = ['${constants.RAW_DATA_ROOT_PATH}/ecommerce_distribution_centers.csv']
+)

@@ -3,3 +3,8 @@ defaultLocation: US
 defaultDataset: thelook_ecommerce_dataform
 defaultAssertionDataset: thelook_ecommerce_dataform_assertions
 dataformCoreVersion: 3.0.0
+
+vars:
+  environment: "development"
+  data_suffix: "_dev"
+  latest_events_date: "2023-01-01" # Date par défaut pour les events
