@@ -1,0 +1,23 @@
+config {
+  type: "incremental",
+  schema: "thelook_ecommerce_dataform",
+  disabled: constants.init != "true",
+  bigquery: {
+    partitionBy: "DATE(created_at)",
+    clusterBy: ["user_id"],
+    partitionExpirationDays: dataform.projectConfig.vars.environment == 'development' 
+          ? constants.DEV_PARTITION_EXPIRATION_DAYS 
+          : null
+  },
+}
+
+SELECT
+  *
+FROM
+  `bigquery-public-data`.thelook_ecommerce.events
+WHERE
+DATE(created_at) >
+  CASE 
+    WHEN '${dataform.projectConfig.vars.environment}' = 'development' THEN PARSE_DATE('%Y-%m-%d', '${dataform.projectConfig.vars.latest_events_date}')
+    ELSE DATE_SUB(CURRENT_DATE(), INTERVAL 60 DAY)
+  END
